@@ -29,21 +29,20 @@ const DialogRow = styled.div`
   width: 100%;
   max-height: fit-content;
   span {
-    width: 80%;
+    max-width: 80%;
     padding: 5px 10px;
     border-radius: 10px;
+    min-height: 20px;
     max-height: fit-content;
   }
   &:nth-child(odd) {
     justify-content: flex-start;
-    min-height: 20px;
     span {
       background-color: #ababab;
     }
   }
   &:nth-child(even) {
     justify-content: flex-end;
-    min-height: 20px;
     span {
       background-color: skyblue;
     }
@@ -81,10 +80,6 @@ export const Dialog = () => {
       key: 2,
       text: "ㄴㅁㅁㄴㄴㅁㅇㅁㄴㅁㄴㅇㅁㄴㅇㅁㄴㅁㄴ",
     },
-    {
-      key: 3,
-      text: "ㄴㅁㅁㄴㄴㅁㅇㅁㄴㅁㄴㅇㅁㄴㅇㅁㄴㅁㄴ",
-    },
   ]);
   const {
     transcript,
@@ -96,20 +91,31 @@ export const Dialog = () => {
 
   console.log("transcript", transcript);
 
-  const useChatGPT = () => {
-    axios
+  const useChatGPT = ({ prompt }: { prompt: string }) => {
+    return axios
       .post("http://localhost:5000/chat", {
-        prompt: "what is pizza?",
+        prompt,
       })
-      .then((res) => console.log(res.data));
+      .then((res) => {
+        console.log(res.data);
+        return res.data;
+      });
   };
 
   useEffect(() => {
     if (finalTranscript && finalTranscript.trim() !== "") {
-      setDialogStack((prev) => [
-        ...prev,
-        { key: prev.length, text: finalTranscript },
-      ]);
+      useChatGPT({ prompt: finalTranscript }).then((data) => {
+        setDialogStack((prev) => {
+          if (prev.length % 2) {
+            return [
+              ...prev,
+              { key: prev.length, text: finalTranscript },
+              { key: prev.length + 1, text: data },
+            ];
+          }
+          return prev;
+        });
+      });
     }
   }, [finalTranscript]);
 
