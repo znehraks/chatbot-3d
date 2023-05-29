@@ -29,6 +29,7 @@ export const Chatbot = () => {
       <Container>
         <AvatarCanvas />
         <Dialog />
+        {/* <Dictaphone /> */}
       </Container>
     </Wrapper>
   );
