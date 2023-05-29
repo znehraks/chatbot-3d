@@ -1,0 +1,6 @@
+export enum AVATAR_MODE {
+  WAIT,
+  LISTENING,
+  ANSWERING,
+  ERROR,
+}
