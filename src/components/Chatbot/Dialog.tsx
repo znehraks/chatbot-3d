@@ -24,26 +24,29 @@ const DialogContainer = styled.div`
 const DialogRow = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   align-items: center;
   padding: 15px 0;
   width: 100%;
+  max-height: fit-content;
   span {
+    width: 80%;
     padding: 5px 10px;
     border-radius: 10px;
+    max-height: fit-content;
   }
   &:nth-child(odd) {
-    span {
-      background-color: skyblue;
-    }
-    height: 20px;
-    justify-content: flex-end;
-  }
-  &:nth-child(even) {
+    justify-content: flex-start;
+    min-height: 20px;
     span {
       background-color: #ababab;
     }
-    height: 20px;
+  }
+  &:nth-child(even) {
+    justify-content: flex-end;
+    min-height: 20px;
+    span {
+      background-color: skyblue;
+    }
   }
 `;
 const DialogSpan = styled.span``;
@@ -65,7 +68,24 @@ const DialogInputButton = styled.button`
 export const Dialog = () => {
   const [dialogStack, setDialogStack] = useState<
     { key: number; text: string }[]
-  >([]);
+  >([
+    {
+      key: 0,
+      text: "무엇이든 물어보세요! 멍멍이가 대답해 드릴게요!ㅁㄴㅇㅁㄴㅇㅁㄴㅁㄴㅇㅁㄴㅇㄴㅁㅇㄴㅁㅁㄴㄴㅁㅇㅁㄴㅁㄴㅇㅁㄴㅇㅁㄴㅁㄴ",
+    },
+    {
+      key: 1,
+      text: "무엇이든 물어보세요! 멍멍이가 대답해 드릴게요!ㅁㄴㅇㅁㄴㅇㅁㄴㅁㄴㅇㅁㄴㅇㄴㅁㅇㄴㅁㅁㄴㄴㅁㅇㅁㄴㅁㄴㅇㅁㄴㅇㅁㄴㅁㄴ",
+    },
+    {
+      key: 2,
+      text: "ㄴㅁㅁㄴㄴㅁㅇㅁㄴㅁㄴㅇㅁㄴㅇㅁㄴㅁㄴ",
+    },
+    {
+      key: 3,
+      text: "ㄴㅁㅁㄴㄴㅁㅇㅁㄴㅁㄴㅇㅁㄴㅇㅁㄴㅁㄴ",
+    },
+  ]);
   const {
     transcript,
     finalTranscript,
