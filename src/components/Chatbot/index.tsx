@@ -13,8 +13,8 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  width: 60%;
-  height: 50%;
+  width: 800px;
+  height: 600px;
   background-color: darkcyan;
 
   display: flex;

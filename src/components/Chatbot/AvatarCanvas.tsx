@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 `;
 
 export const AvatarCanvas = () => {
-  const aspectRatio = (window.innerWidth * 0.6 * 0.4) / window.innerHeight;
+  const aspectRatio = window.innerWidth / window.innerHeight;
   return (
     <Wrapper>
       <Canvas
@@ -29,7 +29,6 @@ export const AvatarCanvas = () => {
           aspect: aspectRatio,
           near: 0.1,
           far: 1000,
-          position: [0, 3, 0],
           zoom: 0.5,
         }}
       >

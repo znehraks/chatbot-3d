@@ -4,8 +4,9 @@ import * as THREE from "three";
 
 export const Avatar = () => {
   const modeling = useLoader(GLTFLoader, "/dog.glb");
-  modeling.scene.rotation.set(-Math.PI / 2, 0, 0);
-  modeling.scene.position.set(0, 0, 1);
+  modeling.scene.rotation.set(0, 0, 0);
+  modeling.scene.position.set(0, -1, 0);
+  modeling.scene.scale.set(1.5, 1.5, 1.5);
   console.log("modeling", modeling);
   const mixer = new THREE.AnimationMixer(modeling.scene);
 
