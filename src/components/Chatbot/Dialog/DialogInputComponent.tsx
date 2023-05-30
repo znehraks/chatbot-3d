@@ -8,6 +8,7 @@ interface IDialogInputComponentProps {
 	inputValue: string | undefined;
 	setInputValue: Dispatch<SetStateAction<string | undefined>>;
 	updateDialogStack: (text: string) => Promise<void>;
+	isAnswering: boolean;
 }
 
 export function DialogInputComponent({
@@ -16,6 +17,7 @@ export function DialogInputComponent({
 	inputValue,
 	setInputValue,
 	updateDialogStack,
+	isAnswering,
 }: IDialogInputComponentProps) {
 	const handleOnChange = ({ currentTarget: { value } }: React.FormEvent<HTMLInputElement>) => {
 		setInputValue(value);
@@ -23,7 +25,7 @@ export function DialogInputComponent({
 
 	return (
 		<DialogInputContainer>
-			<DialogInput value={inputValue ?? ''} onChange={handleOnChange} />
+			<DialogInput value={inputValue ?? ''} onChange={handleOnChange} disabled={isAnswering} />
 			<DialogInputButton
 				onClick={() => {
 					if (inputValue) {

@@ -6,11 +6,6 @@ export const getAnswer = ({ prompt }: { prompt: string }) => {
 			prompt,
 		})
 		.then((res) => {
-			console.log(res.data);
 			return res.data;
-		})
-		.catch((e) => {
-			console.error(e);
-			throw Error(e);
 		});
 };

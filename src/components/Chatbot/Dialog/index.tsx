@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 
 import { useSpeechRecognition } from 'react-speech-recognition';
 import { Skeleton } from 'antd';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { getAnswer } from '../../../api';
 import { avatarModeAtom } from '../../../atoms';
 import { AVATAR_MODE } from '../../../enum';
@@ -17,7 +17,7 @@ export function Dialog() {
 	const [inputValue, setInputValue] = useState<string | undefined>();
 	const [isAnswering, setIsAnswering] = useState(false);
 	const [hasError, setHasError] = useState(false);
-	const [, setAvatarMode] = useRecoilState(avatarModeAtom);
+	const setAvatarMode = useSetRecoilState(avatarModeAtom);
 	const [dialogStack, setDialogStack] = useState<{ key: number; text: string }[]>([initialDialog]);
 	const { finalTranscript, listening, browserSupportsSpeechRecognition, resetTranscript } = useSpeechRecognition();
 
@@ -109,6 +109,7 @@ export function Dialog() {
 					inputValue={inputValue}
 					setInputValue={setInputValue}
 					updateDialogStack={updateDialogStack}
+					isAnswering={isAnswering}
 				/>
 			</DialogContainer>
 		</Wrapper>
