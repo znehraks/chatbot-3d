@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil';
 import { getAnswer } from '../../../api';
 import { avatarModeAtom } from '../../../atoms';
 import { AVATAR_MODE } from '../../../enum';
-import { initialDialog } from '../../../localData';
+import { ERROR_MESSAGE, initialDialog } from '../../../localData';
 import { isValidText } from '../../../utils';
 import { DialogContainer, Wrapper } from './styledComponents';
 import { DialogRows } from './DialogRows';
@@ -14,56 +14,58 @@ import { DialogInputComponent } from './DialogInputComponent';
 
 export function Dialog() {
 	const dialogRef = useRef<HTMLDivElement>(null);
+	const [inputValue, setInputValue] = useState<string | undefined>();
 	const [isAnswering, setIsAnswering] = useState(false);
 	const [hasError, setHasError] = useState(false);
 	const [, setAvatarMode] = useRecoilState(avatarModeAtom);
 	const [dialogStack, setDialogStack] = useState<{ key: number; text: string }[]>([initialDialog]);
-	const { finalTranscript, listening, browserSupportsSpeechRecognition } = useSpeechRecognition();
+	const { finalTranscript, listening, browserSupportsSpeechRecognition, resetTranscript } = useSpeechRecognition();
 
-	const updateDialogStack = useCallback(async () => {
-		// 유저가 질문한 텍스트 버블이 set됨
-		setDialogStack((prev) => {
-			if (prev.length % 2) {
-				return [...prev, { key: prev.length, text: finalTranscript }];
-			}
-			return prev;
-		});
-		setIsAnswering(true);
-		try {
-			const data = await getAnswer({ prompt: finalTranscript });
-			// 아바타의 답변 텍스트 버블이 set됨
-			if (isValidText(data)) {
-				setDialogStack((prev) => {
-					// 성공
-					if (prev.length % 2 === 0) {
-						return [...prev, { key: prev.length + 1, text: data }];
-					}
-					// 위 case 이외
-					return prev;
-				});
-			} else {
-				setDialogStack((prev) => {
-					// api 데이터 누락
-					return [...prev, { key: prev.length + 1, text: '죄송합니다. 잠시 후에, 다시 질문해 주실래요?' }];
-				});
+	const updateDialogStack = useCallback(
+		async (text: string) => {
+			// 유저가 질문한 텍스트 버블이 set됨
+			setDialogStack((prev) => {
+				if (prev.length % 2) {
+					return [...prev, { key: prev.length, text }];
+				}
+				return prev;
+			});
+			setIsAnswering(true);
+			try {
+				const data = await getAnswer({ prompt: text });
+				// 아바타의 답변 텍스트 버블이 set됨
+				if (isValidText(data)) {
+					setDialogStack((prev) => {
+						// 성공
+						if (prev.length % 2 === 0) {
+							return [...prev, { key: prev.length, text: data }];
+						}
+						// 위 case 이외
+						return prev;
+					});
+				} else {
+					setDialogStack((prev) =>
+						// api 데이터 누락
+						[...prev, { key: prev.length, text: ERROR_MESSAGE }]
+					);
+					setHasError(true);
+				}
+			} catch {
+				// getAnswer에서 error가 올 경우,
+				setDialogStack((prev) => [...prev, { key: prev.length, text: ERROR_MESSAGE }]);
 				setHasError(true);
+			} finally {
+				resetTranscript();
+				setIsAnswering(false);
 			}
-		} catch {
-			// getAnswer에서 error가 올 경우,
-			setDialogStack((prev) => [
-				...prev,
-				{ key: prev.length + 1, text: '죄송합니다. 잠시 후에, 다시 질문해 주실래요?' },
-			]);
-			setHasError(true);
-		} finally {
-			setIsAnswering(false);
-		}
-	}, [finalTranscript]);
+		},
+		[resetTranscript]
+	);
 
 	// 유저의 질문에 대한 처리를 하는 hook
 	useEffect(() => {
 		if (isValidText(finalTranscript)) {
-			updateDialogStack();
+			updateDialogStack(finalTranscript);
 		}
 	}, [finalTranscript, updateDialogStack]);
 
@@ -102,9 +104,11 @@ export function Dialog() {
 				))}
 				{isAnswering && <Skeleton active paragraph={{ rows: 1 }} title={false} />}
 				<DialogInputComponent
-					finalTranscript={finalTranscript}
 					browserSupportsSpeechRecognition={browserSupportsSpeechRecognition}
 					listening={listening}
+					inputValue={inputValue}
+					setInputValue={setInputValue}
+					updateDialogStack={updateDialogStack}
 				/>
 			</DialogContainer>
 		</Wrapper>

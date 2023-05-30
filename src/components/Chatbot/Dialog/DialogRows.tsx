@@ -1,9 +1,13 @@
 import React from 'react';
 import { DialogRow, DialogSpan } from './styledComponents';
 
-export function DialogRows({ key, text }: { key: number; text: string }) {
+interface IDialogRowsProps {
+	text: string;
+}
+
+export function DialogRows({ text }: IDialogRowsProps) {
 	return (
-		<DialogRow key={key}>
+		<DialogRow>
 			<DialogSpan>{text}</DialogSpan>
 		</DialogRow>
 	);

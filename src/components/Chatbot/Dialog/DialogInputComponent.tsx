@@ -1,22 +1,38 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 import { DialogInput, DialogInputButton, DialogInputContainer } from './styledComponents';
 
 interface IDialogInputComponentProps {
-	finalTranscript: string;
 	browserSupportsSpeechRecognition: boolean;
 	listening: boolean;
+	inputValue: string | undefined;
+	setInputValue: Dispatch<SetStateAction<string | undefined>>;
+	updateDialogStack: (text: string) => Promise<void>;
 }
 
 export function DialogInputComponent({
-	finalTranscript,
 	browserSupportsSpeechRecognition,
 	listening,
+	inputValue,
+	setInputValue,
+	updateDialogStack,
 }: IDialogInputComponentProps) {
+	const handleOnChange = ({ currentTarget: { value } }: React.FormEvent<HTMLInputElement>) => {
+		setInputValue(value);
+	};
+
 	return (
 		<DialogInputContainer>
-			<DialogInput value={finalTranscript} />
-			<DialogInputButton>텍스트로 입력 받기</DialogInputButton>
+			<DialogInput value={inputValue ?? ''} onChange={handleOnChange} />
+			<DialogInputButton
+				onClick={() => {
+					if (inputValue) {
+						updateDialogStack(inputValue);
+						setInputValue(undefined);
+					}
+				}}>
+				텍스트로 입력 받기
+			</DialogInputButton>
 			{browserSupportsSpeechRecognition && (
 				<>
 					<DialogInputButton
