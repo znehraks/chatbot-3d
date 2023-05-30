@@ -1,6 +1,6 @@
 import React from 'react';
-import { Chatbot } from './components/Chatbot';
 import { RecoilRoot } from 'recoil';
+import { Chatbot } from './components/Chatbot';
 
 function App() {
 	return (
