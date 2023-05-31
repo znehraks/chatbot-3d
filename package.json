@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite NODE_ENV=''",
+    "dev": "concurrently \"vite\" \"ts-node server.ts\"",
+    "server": "ts-node server.ts",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -19,6 +20,7 @@
     "antd": "^5.5.1",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
+    "concurrently": "^8.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

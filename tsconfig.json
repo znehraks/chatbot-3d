@@ -13,7 +13,7 @@
         "moduleResolution": "Node",
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "module": "ES6",
+        "module": "ESNext",
         "noEmit": true,
         "types": ["node"]
     },
