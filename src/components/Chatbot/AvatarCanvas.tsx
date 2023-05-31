@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import * as THREE from 'three';
 import React from 'react';
 import { Avatar } from './models/Avatar';
+import { CAMERA_FAR, CAMERA_FOV, CAMERA_NEAR, CAMERA_ZOOM } from '../../constants';
 
 const Wrapper = styled.div`
 	flex: 2;
@@ -24,11 +25,11 @@ export function AvatarCanvas() {
 					type: THREE.PCFSoftShadowMap,
 				}}
 				camera={{
-					fov: 30,
+					fov: CAMERA_FOV,
 					aspect: aspectRatio,
-					near: 0.1,
-					far: 1000,
-					zoom: 0.5,
+					near: CAMERA_NEAR,
+					far: CAMERA_FAR,
+					zoom: CAMERA_ZOOM,
 				}}>
 				<ambientLight />
 				<Avatar />

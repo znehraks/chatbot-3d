@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import { getAnswer } from '../../../api';
 import { avatarModeAtom } from '../../../atoms';
 import { AVATAR_MODE } from '../../../enum';
-import { ERROR_MESSAGE, initialDialog } from '../../../localData';
+import { ERROR_MESSAGE, initialDialog } from '../../../constants';
 import { isValidText } from '../../../utils';
 import { DialogContainer, Wrapper } from './styledComponents';
 import { DialogRows } from './DialogRows';
